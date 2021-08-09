@@ -2,7 +2,7 @@ import os
 from typing import AnyStr, Collection
 from fastapi.applications import FastAPI
 from models import ToDo
-
+from loguru import logger
 # MongoDB Driver
 # import pymongo
 import motor.motor_asyncio
@@ -21,10 +21,14 @@ async def fetch_one_todo(title):
 
 
 async def fetch_all_todos():
+    logger.debug("Fetch all todo function called")
     todos = []
     cursor = Collection.find()
+    logger.debug("documents are find in cursor variable")
     async for document in cursor:
+        logger.debug("Looping through cursor to get all documents all keys ")
         todos.append(ToDo(**document))
+    logger.debug("returned all todos")
     return todos
 
 async def create_todo(todo):

@@ -9,15 +9,20 @@ from database import(
     create_todo,
 )
 
+from loguru import logger
+
 app = FastAPI()
 
 @app.get("/")
 def reat_root():
+    logger.debug("Executing read root function It will return Hello World")
     return {"message": "Hello World"}
 
 @app.get("/api/todo")
 async def get_todo():
+    logger.add("somefile.log", enqueue=True)
     response = await fetch_all_todos()
+    logger.debug("Response captured ")
     return response
 
 @app.get("/api/todo{title}", response_model=ToDo)
@@ -47,6 +52,4 @@ async def get_todo(title):
     if response:
         return "Item deleted successfully!"
     raise HTTPException(404, f"No item found with title {title}")
-
-
 
